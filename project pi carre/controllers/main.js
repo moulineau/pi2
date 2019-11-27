@@ -22,8 +22,20 @@ const getTableData = (req, res) => {
     })
     .catch(err => res.status(400).json({dbError: 'db error'}))
 }
-const getUserBymail =(email) => {    
-    db('users').where('email', email)     
+const getUserBymail =(email,res,next) => {    
+    db('users').where('email', email)
+        .then(user => {
+            console.log('user', user);
+            if (user.length<=1) {
+                //this is a unique email
+                res.json({
+                    message: 'welcome'
+                });
+            }            
+            else {
+                next(new error('Email in use'));
+            }
+        });
 }
 const getUser = (req, res, id,next) => {
     if (!isNaN(id)) {
@@ -41,9 +53,6 @@ const getUser = (req, res, id,next) => {
         next(new Error('Invalid ID'));
     }
 }
-
-
-
 
 module.exports = {
     getTableData,

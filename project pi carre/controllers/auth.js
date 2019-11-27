@@ -17,14 +17,7 @@ function validateUser(users) {
 
 router.post('/signup', (req, res,next) => {
     if (validateUser(req.body)) {
-        User.getUserByMail(req.body.email)
-            .then(user => {
-                console.log('user', user);
-                res.json({
-                    user,
-                    message: 'welcolme'
-                });
-            });  
+        User.getUserBymail(req.body.email, res,next);
     } else {
         next(new Error('Invalid User'));
     }  
