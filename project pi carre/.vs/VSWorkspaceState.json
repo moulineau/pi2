@@ -1,8 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\firstAPIfront"
+    "\\controllers"
   ],
-  "SelectedNode": "\\package.json",
+  "SelectedNode": "\\controllers\\auth.js",
   "PreviewInSolutionExplorer": false
 }
