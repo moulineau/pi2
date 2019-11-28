@@ -9,6 +9,7 @@ const helmet = require('helmet') // creates headers that protect from attacks (s
 const bodyParser = require('body-parser') // turns response into usable format
 const cors = require('cors')  // allows/disallows cross-site communication
 const morgan = require('morgan') // logs requests
+const cookieParser = require('cookie-parser');
 
 
 // Controllers - aka, the db queries
@@ -18,7 +19,7 @@ const main = require('./controllers/main.js')
 
 // App
 const app = express()
-
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(morgan('combined')) // use 'tiny' or 'combined'
@@ -29,15 +30,14 @@ app.use('/auth', auth)
 app.get('/allUsers', (req, res) => main.getTableData(req, res))
 app.get('/users/:id', (req, res,next) => main.getUser(req, res, req.params.id,next))
 
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
     res.status(err.status || 500);
-    res.render('error');
     res.json({
         message: err.message,
         error: req.app.get('env') === 'development' ? err : {}

@@ -9,8 +9,6 @@ var db = require('knex')({
     }
 });
 
-
-
 const getTableData = (req, res) => {
   db.select('*').from('users').orderBy('id')
     .then(items => {
@@ -22,20 +20,11 @@ const getTableData = (req, res) => {
     })
     .catch(err => res.status(400).json({dbError: 'db error'}))
 }
-const getUserBymail =(email,res,next) => {    
-    db('users').where('email', email)
-        .then(user => {
-            console.log('user', user);
-            if (user.length<=1) {
-                //this is a unique email
-                res.json({
-                    message: 'welcome'
-                });
-            }            
-            else {
-                next(new error('Email in use'));
-            }
-        });
+function getUserBymail (req)  {
+    return db('users').where('email', req.body.email);
+}
+function Create (user,res) {
+    return db('users').insert(user).then(ids => { return ids[0];});    
 }
 const getUser = (req, res, id,next) => {
     if (!isNaN(id)) {
@@ -54,8 +43,14 @@ const getUser = (req, res, id,next) => {
     }
 }
 
+function test(req) {
+    return db('users').where('email', req.body.email);
+        
+}
 module.exports = {
     getTableData,
     getUser,
-    getUserBymail
+    getUserBymail,
+    Create,
+    test
 }

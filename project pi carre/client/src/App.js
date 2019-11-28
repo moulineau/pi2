@@ -23,12 +23,11 @@ class App extends Component {
 
   render() {
     return (
-      <Container className="App">
+      <Container className="App" >
         <Row>
           <Col>
             <h1 style={{margin: "20px 0"}}>Users Database</h1>
-			
-          </Col>
+		  </Col>
         </Row>
         <Row>
           <Col>
@@ -46,8 +45,9 @@ class App extends Component {
               Download CSV
             </CSVLink>           
           </Col>
-        </Row>
-      </Container>
+            </Row>            
+        </Container>
+        
     )
   }
 }
