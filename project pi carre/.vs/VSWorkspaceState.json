@@ -4,8 +4,11 @@
     "\\client",
     "\\client\\src",
     "\\client\\src\\Components",
-    "\\client\\src\\Components\\Forms"
+    "\\client\\src\\Components\\Forms",
+    "\\client\\src\\Components\\Modals",
+    "\\client\\src\\Components\\Tables",
+    "\\controllers"
   ],
-  "SelectedNode": "\\client\\src\\Components\\login.html",
+  "SelectedNode": "\\client\\src\\Form.js",
   "PreviewInSolutionExplorer": false
 }

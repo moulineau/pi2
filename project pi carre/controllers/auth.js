@@ -12,7 +12,7 @@ router.get('/',(req,res)=>{
 });
 
 function validateUser(users) {
-    const validEmail = typeof users.email == 'string' && users.email.trim() != '';
+    const validEmail = typeof (users.email) == 'string' && users.email.trim() != '';
     const validPassword = typeof users.mdp == 'string' && users.mdp.trim() != '' && users.mdp.trim().length >= 6;
     return validEmail && validPassword;
 }
@@ -70,7 +70,7 @@ router.post('/login', (req, res,next) => {
                                     secure: isSecure //true in prod
                                 });
                                 res.json({
-                                    result,
+                                    id: user[0].id,
                                     message: 'logged in'
                                 });
                             }
@@ -97,3 +97,5 @@ router.post('/login', (req, res,next) => {
 module.exports = router;
 
 //mot de passe pour utilisateur 1 : '123456'
+//mot de passe pour utilisateur 2 : 'abcdef'
+//mot de p pour uti 3 : 'azerty

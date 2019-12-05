@@ -1,9 +1,7 @@
-
-import React, { Component } from 'react'
-import { Container, Row, Col } from 'reactstrap'
-import ModalForm from './Components/Modals/Modal'
-import DataTable from './Components/Tables/DataTable'
-import { CSVLink } from "react-csv"
+import React, { Component } from 'react';
+import { Container, Row, Col, Button } from 'reactstrap';
+import DataTable from './Components/Tables/DataTable';
+import { CSVLink } from "react-csv";
 
 class App extends Component {
   state = {
@@ -11,7 +9,7 @@ class App extends Component {
   }
 
   getItems(){
-    fetch('/AllUsers')
+    fetch('/allUsers')
       .then(response => response.json())
       .then(items => this.setState({items}))
       .catch(err => console.log(err))
@@ -20,9 +18,11 @@ class App extends Component {
   componentDidMount(){
     this.getItems()
   }
-
+  Home = () => {
+     this.props.history.push("/", {});
+  };
   render() {
-    return (
+    return ( 
       <Container className="App" >
         <Row>
           <Col>
@@ -43,11 +43,15 @@ class App extends Component {
               className="btn btn-primary"
               data={this.state.items}>
               Download CSV
-            </CSVLink>           
+            </CSVLink>  
+            <Button
+                onClick={this.Home}
+                color="danger"
+                style={{ float: "right", marginRight: "5px" }}> Home
+            </Button>
           </Col>
-            </Row>            
+            </Row>  
         </Container>
-        
     )
   }
 }

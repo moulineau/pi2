@@ -28,7 +28,7 @@ app.use(morgan('combined')) // use 'tiny' or 'combined'
 app.get('/', (req, res) => res.send('hello world'))
 app.use('/auth', auth)
 app.get('/allUsers', (req, res) => main.getTableData(req, res))
-app.get('/users/:id', (req, res,next) => main.getUser(req, res, req.params.id,next))
+app.get('/users/:id', (req, res, next) => main.getUser(req, res, req.params.id, next))
 
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
