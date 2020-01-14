@@ -1,14 +1,16 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+
 
 class Forme extends React.Component {
     state = {
         mdp: '',
         email: '',
-        visible: false
+        visible: false,
+        MessageError:''
     }
-
+    
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -19,7 +21,8 @@ class Forme extends React.Component {
             email: this.state.email
         }
         e.preventDefault()
-        fetch('/auth/login', {
+        fetch('/auth/login', {            
+            credentials: 'include',
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,16 +33,18 @@ class Forme extends React.Component {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    const a = response.json();
-                    throw new Error(a.responseText);
+                    throw response;
                 }
             })
             .then(response => {
-                console.log(response);
-                this.props.history.push(`/users/${response.id}`, {});
+                localStorage.user_id = response.id;
+                this.props.history.push(`/users/${response.id}`, {});                
             })
             .catch(err => {
-                console.log(err);
+                err.json().then(errMess => {
+                    console.log("error : ", errMess.message);
+                    this.setState({ MessageError: errMess.message });
+                });
                 this.setState({ visible: true });
             })
     };
@@ -54,12 +59,12 @@ class Forme extends React.Component {
     Home = () => {
         this.props.history.push("/", {});
     };
-
-    render() {
+    render() {        
         const onDismiss = () => this.setState({ visible: false });        
         return (
             <div>
-                <Alert color="danger" isOpen={this.state.visible} toggle={onDismiss}>Donnees invalides</Alert>
+                {localStorage.user_id ? <Redirect to="/users/{localStorage.user_id}" />:null}
+                <Alert color="danger" isOpen={this.state.visible} toggle={onDismiss}>{this.state.MessageError}</Alert>
                 <Form onSubmit={this.submitForm}>
                     <FormGroup>
                         <Label for="email">Email</Label>

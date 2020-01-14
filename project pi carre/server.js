@@ -5,39 +5,38 @@ const express = require('express')
 require('dotenv').config()
 
 // Express Middleware
+
 const helmet = require('helmet') // creates headers that protect from attacks (security)
 const bodyParser = require('body-parser') // turns response into usable format
 const cors = require('cors')  // allows/disallows cross-site communication
 const morgan = require('morgan') // logs requests
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser')
 
-
-// Controllers - aka, the db queries
+// Controllers 
 const auth = require('./controllers/auth.js')
-const main = require('./controllers/main.js')
-
+const user = require('./controllers/user.js')
+const authMiddleware = require('./controllers/middleware');
 
 // App
 const app = express()
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser('test'));
 app.use(helmet())
+app.use(cors({
+    origin: "htp://localhost:3000/",
+    credentials:true
+}))
 app.use(bodyParser.json())
 app.use(morgan('combined')) // use 'tiny' or 'combined'
 
-// App Routes - Auth
-app.get('/', (req, res) => res.send('hello world'))
+// App Routes 
 app.use('/auth', auth)
-app.get('/allUsers', (req, res) => main.getTableData(req, res))
-app.get('/users/:id', (req, res, next) => main.getUser(req, res, req.params.id, next))
+app.use('/use', authMiddleware.ensureLoggedIn, user)
 
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+
+
 // error handler
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
+    res.status(err.status ||  500);
     res.json({
         message: err.message,
         error: req.app.get('env') === 'development' ? err : {}

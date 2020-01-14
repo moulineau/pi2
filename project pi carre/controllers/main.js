@@ -26,31 +26,17 @@ function getUserBymail (req)  {
 function Create (user,res) {
     return db('users').insert(user).then(ids => { return ids[0];});    
 }
-const getUser = (req, res, id,next) => {
-    if (!isNaN(id)) {
-        db('users').where('id', id)
-            .then(items => {
-                if (items) {
-                    res.json(items);
-                } else {
-                    //resError(res, 404, "User Not Found");
-                    next(new Error('Invalid User'));
-                }
-            });
-    }
-    else {
-        next(new Error('Invalid ID'));
-    }
+function getUser(req, res, id, next) {
+    return db('users').where('id', id);  
+}
+function getAdmin(req, res, id, next){
+    return db('users').where('id', id).select('isadmin');
 }
 
-function test(req) {
-    return db('users').where('email', req.body.email);
-        
-}
 module.exports = {
     getTableData,
     getUser,
     getUserBymail,
     Create,
-    test
+    getAdmin
 }

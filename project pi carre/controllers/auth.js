@@ -1,9 +1,10 @@
-const express =require('express');
-const router = express();
+const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('./main');
-
 var Id = 13;
+const authMiddleware = require('./middleware');
+
 
 router.get('/',(req,res)=>{
 	res.json({
@@ -17,12 +18,10 @@ function validateUser(users) {
     return validEmail && validPassword;
 }
 
-
 router.post('/signup', (req, res,next) => {
     if (validateUser(req.body)) {
         User.getUserBymail(req)
             .then(user => {
-                console.log('user', user);
                 if (user.length < 1) {
                     //this is a unique email
                     //insert new user into db + crypt password
@@ -53,21 +52,32 @@ router.post('/signup', (req, res,next) => {
         next(new Error('Invalid User'));
     }  
 });
-
+router.get('/logout', (req, res) => {
+    res.clearCookie('user_id');
+    res.json({
+        message: 'logout succesfully'
+    });
+});
+router.get('/isadmin', authMiddleware.ensureLoggedIn,(req, res, next) => {
+    User.getAdmin(req, res, req.signedCookies.user_id, next)
+        .then(response => {
+            console.log(response[0].isadmin);
+            res.json({ admin: response[0].isadmin });            
+        }); 
+})
 router.post('/login', (req, res,next) => {
     if (validateUser(req.body)) {
         User.getUserBymail(req)
             .then(user => {
-                console.log('user', user);
                 if (user.length >= 1) {
                     bcrypt.compare(req.body.mdp, user[0].mdp)
                         .then(function (result) {
                             if (result) {//goood password
                                 const isSecure = req.app.get('env') != 'development'
-                                res.cookie('user_id', user.id, {
+                                res.cookie('user_id', user[0].id, {
                                     httpOnly: true,
                                     signed: true,
-                                    secure: isSecure //true in prod
+                                    secure: false //true in prod
                                 });
                                 res.json({
                                     id: user[0].id,
@@ -75,7 +85,7 @@ router.post('/login', (req, res,next) => {
                                 });
                             }
                             else {
-                                next(new Error('Invalid Login'));
+                                next(new Error('Wrong Password'));
                             }
                         });
                     //console.log(user[0].mdp);
@@ -85,12 +95,12 @@ router.post('/login', (req, res,next) => {
                     //    });
                     //}                    
                 } else {
-                    next( new Error('Invalid Login'));
+                    next( new Error('Undefined User'));
                 }
                 
             })
     } else {
-        next(new Error('Invalid Login'));
+        next(new Error('Invalid Login or password'));
     }
 })
 

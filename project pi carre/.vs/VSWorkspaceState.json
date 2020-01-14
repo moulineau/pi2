@@ -3,12 +3,8 @@
     "",
     "\\client",
     "\\client\\src",
-    "\\client\\src\\Components",
-    "\\client\\src\\Components\\Forms",
-    "\\client\\src\\Components\\Modals",
-    "\\client\\src\\Components\\Tables",
     "\\controllers"
   ],
-  "SelectedNode": "\\client\\src\\Form.js",
+  "SelectedNode": "\\client\\src\\App.js",
   "PreviewInSolutionExplorer": false
 }

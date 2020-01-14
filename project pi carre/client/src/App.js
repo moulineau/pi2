@@ -9,10 +9,28 @@ class App extends Component {
   }
 
   getItems(){
-    fetch('/allUsers')
-      .then(response => response.json())
-      .then(items => this.setState({items}))
-      .catch(err => console.log(err))
+      fetch('/use/allUsers', { credentials: 'include'})
+          .then(response => {
+              if (response.ok) {
+                  return response.json();
+              } else {
+                  throw response;
+              }
+          })
+          .then(items => this.setState({items}))
+          .catch(err => {
+              err.json().then(errMess => {
+                  console.log("error : ", errMess.message);
+                  if (errMess.message === "Un-Authorized User" || errMess.message === "Not Admin" ) {
+                      this.props.history.push(`/users/${localStorage.user_id}`, {});
+                      window.location.reload();
+                  }
+                  else {
+                      this.props.history.push("/login", {})
+                  }
+              })
+
+          })
   }  
 
   componentDidMount(){
