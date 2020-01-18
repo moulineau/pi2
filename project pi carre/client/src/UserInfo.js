@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button } from 'reactstrap';
+import { Table, Button, ButtonDropdown,DropdownItem,DropdownMenu,DropdownToggle } from 'reactstrap';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 
@@ -7,7 +7,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 class App extends Component {   
     state = {
         user: [],
-        hide: true
+        hide: true,
+        dropdownOpen :false
     }
     componentDidMount() {
         const { match: { params } } = this.props;
@@ -24,7 +25,7 @@ class App extends Component {
                 err.json().then(errMess => {
                     console.log("error : ", errMess.message);
                     if (errMess.message === "Un-Authorized User") {
-                        this.props.history.push(`/users/${localStorage.user_id}`, {});
+                        this.props.history.push(`/users/${sessionStorage.user_id}`, {});
                         window.location.reload();
                     }
                     else {
@@ -50,7 +51,7 @@ class App extends Component {
         this.props.history.push("/allUsers", {});
     }
     Logout = () => {
-        localStorage.removeItem('user_id');
+        sessionStorage.removeItem('user_id');
         fetch("/auth/logout", { credentials: 'include' })
             .then(response => {
                 if (response.ok) {
@@ -69,6 +70,21 @@ class App extends Component {
                 })
             });        
     };
+    toggle=()=>{
+        this.setState({dropdownOpen : !this.state.dropdownOpen})
+    }
+    somme=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/somme`, {});
+    }
+    somme2=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/somme2`, {});
+    }
+    sommeavg=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/sommeavg`, {});
+    }
+    sommeavg2=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/sommeavg2`, {});
+    }
     render() {
         const user = this.state.user.map(item => {
             return (
@@ -81,9 +97,24 @@ class App extends Component {
                 </tr>
             )
         })
+        
         return (
             <Router forceRefresh={true}>
                 <div className="Unique User">
+                    <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle caret color="danger">
+                            Mes Choix 
+                        </DropdownToggle>
+                        <DropdownMenu>                            
+                            <DropdownItem onClick={this.somme}>somme totale investie</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.somme2}>Nombre d'achat total</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.sommeavg2}>moyenne des sommes par achats</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.sommeavg}>prix moyen d'entrée sur ethereum</DropdownItem>
+                        </DropdownMenu>
+                    </ButtonDropdown>
                     <Table responsive hover>
                         <thead>
                             <tr>

@@ -37,7 +37,7 @@ class Forme extends React.Component {
                 }
             })
             .then(response => {
-                localStorage.user_id = response.id;
+                sessionStorage.user_id = response.id;
                 this.props.history.push(`/users/${response.id}`, {});                
             })
             .catch(err => {
@@ -63,7 +63,7 @@ class Forme extends React.Component {
         const onDismiss = () => this.setState({ visible: false });        
         return (
             <div>
-                {localStorage.user_id ? <Redirect to="/users/{localStorage.user_id}" />:null}
+                {sessionStorage.user_id ? <Redirect to="/users/{localStorage.user_id}" />:null}
                 <Alert color="danger" isOpen={this.state.visible} toggle={onDismiss}>{this.state.MessageError}</Alert>
                 <Form onSubmit={this.submitForm}>
                     <FormGroup>

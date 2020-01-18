@@ -18,7 +18,7 @@ class app extends Component {
             <Router forceRefresh={true}>
                 <div className="home">
                      <header className="page-header">
-                        <h1>Welcolme</h1>
+                        <h1>Welcome</h1>
                     </header>
                     <Button
                         onClick={this.ToAllUser}

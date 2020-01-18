@@ -22,7 +22,7 @@ class App extends Component {
               err.json().then(errMess => {
                   console.log("error : ", errMess.message);
                   if (errMess.message === "Un-Authorized User" || errMess.message === "Not Admin" ) {
-                      this.props.history.push(`/users/${localStorage.user_id}`, {});
+                      this.props.history.push(`/users/${sessionStorage.user_id}`, {});
                       window.location.reload();
                   }
                   else {
