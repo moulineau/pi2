@@ -45,7 +45,7 @@ class App extends Component {
         <Row>
           <Col>
             <h1 style={{margin: "20px 0"}}>Users Database</h1>
-		  </Col>
+		      </Col>
         </Row>
         <Row>
           <Col>

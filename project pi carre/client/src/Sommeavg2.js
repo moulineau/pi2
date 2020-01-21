@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-
-
+import { ButtonDropdown,DropdownItem,DropdownMenu,DropdownToggle } from 'reactstrap';
+import Cookies from "js-cookie";
 
 
 class app extends Component {
     state = {
-        user: []
+        user: [],
+        dropdownOpen :false
     }
     componentDidMount(){
         const { match: { params } } = this.props;
@@ -34,11 +35,40 @@ class app extends Component {
 
             });
     }
+    toggle=()=>{this.setState({dropdownOpen : !this.state.dropdownOpen})}
+    somme=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/somme`, {});
+    }
+    somme2=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/somme2`, {});
+    }
+    sommeavg=()=>{
+        this.props.history.push(`/users/${sessionStorage.user_id}/sommeavg2`, {});
+    }
+    main=()=>{
+        this.props.history.push(`/users/${Cookies.get('user_id')}`, {});
+        console.log("cookies",Cookies.get('user_id'));
+    }
     render() {
         return (     
             <Router forceRefresh={true}>  
                 <div>
-                    <p>somme :{this.state.user}</p>
+                    <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle caret color="danger">
+                            Mes Choix 
+                        </DropdownToggle>
+                        <DropdownMenu>                            
+                            <DropdownItem onClick={this.main}>Somme totale investie</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.somme2}>Nombre d'achat total</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.sommeavg}>Prix moyen d'entrée sur ethereum</DropdownItem>                            
+                            <DropdownItem divider />
+                            <DropdownItem onClick={this.main}>Page d'accueil</DropdownItem>
+                        </DropdownMenu>
+                    </ButtonDropdown>
+                    <br /><br />
+                    <p>Moyenne des montants dépensés par achat : {this.state.user}</p>
                 </div>
             </Router>                 
         )

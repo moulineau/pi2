@@ -8,6 +8,7 @@
     "bootstrap": "^4.4.1",
     "cookie-parser": "^1.4.4",
     "history": "^4.10.1",
+    "js-cookie": "^2.2.1",
     "loose-envify": "^1.4.0",
     "react": "^16.12.0",
     "react-csv": "^1.1.2",
@@ -16,7 +17,8 @@
     "react-scripts": "^3.3.0",
     "reactstrap": "^8.1.1",
     "tiny-invariant": "^1.0.6",
-    "tiny-warning": "^1.0.3"
+    "tiny-warning": "^1.0.3",
+    "victory": "^34.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

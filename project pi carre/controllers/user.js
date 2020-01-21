@@ -85,5 +85,25 @@ router.get('/users/:id/somme2',authMiddleware.allowAccess,(req,res,next)=>{
         next(new Error('Invalid ID'));
     } 
 })
+router.get('/users/:id/buydate',authMiddleware.allowAccess,(req,res,next)=>{
+    if (!isNaN(req.params.id)) {
+        main.buyByDate(req, res, req.params.id, next)
+            .then(items => {
+                if (items) {
+                   var retour=items;
+                   for(var i=0;i<items.length;i++){
+                       retour[i].traded_currency= items[i].traded_currency;
+                       retour[i].timestamp= parseInt(items[i].timestamp,10);
+                   }
+                    res.json(retour); 
+                } else {
+                    next(new Error('Invalid User'));
+                }
+            });
+    }
+    else {
+        next(new Error('Invalid ID'));
+    } 
+})
 module.exports = router;
     

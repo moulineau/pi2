@@ -46,6 +46,9 @@ function sommeavg2(req,res,id,next){ //moyenne des achats pour chaque opé
 function somme2(req,res,id,next){ //nb achat par user
   return db('share_in_machine').count('traded_currency').innerJoin('records','machine_id','machineid').where('user_id',id);
 }
+function buyByDate(req,res,id,next){ //achat par user et par date
+  return db('records').select('traded_currency','timestamp').innerJoin('share_in_machine','records.id','share_in_machine.id').where('share_in_machine.user_id',id)
+}
 module.exports = {
     getTableData,
     getUser,
@@ -55,5 +58,6 @@ module.exports = {
     somme,
     sommeavg,
     somme2,
-    sommeavg2
+    sommeavg2,
+    buyByDate
 }

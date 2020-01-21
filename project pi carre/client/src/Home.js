@@ -22,7 +22,7 @@ class app extends Component {
                     </header>
                     <Button
                         onClick={this.ToAllUser}
-                       
+                        size="lg"
                         color="info"block
                         style={{ float: "center", marginRight: "10px"}}>tous les users
                     </Button> 
